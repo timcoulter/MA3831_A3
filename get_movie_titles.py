@@ -1,36 +1,6 @@
 import asyncio, aiohttp, aiohttp_retry, os, bs4, requests, re, pickle, time
 import pandas as pd
 
-async def fetch(session, url):
-    """Execute an http call async
-    Args:
-        session: contexte for making the http call
-        url: URL to call
-    Return:
-        responses: A dict like object containing http response
-    """
-    async with session.get(url) as response:
-        resp = await response.json()
-        return resp
-
-async def fetch_all(urls):
-    """ Gather many HTTP call made async
-    Args:
-        cities: a list of string 
-    Return:
-        responses: A list of dict like object containing http response
-    """
-    async with aiohttp.ClientSession() as session:
-        tasks = []
-        for url in urls:
-            tasks.append(fetch(session,url,))
-        responses = await asyncio.gather(*tasks, return_exceptions=True)
-        return responses
-
-def run(urls):
-    responses = asyncio.run(fetch_all(urls))
-    return responses
-
 try:
     pth = 'C:/Users/Tim/Documents/MA3831 Data'
     os.chdir(pth)
