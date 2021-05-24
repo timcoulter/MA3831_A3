@@ -8,6 +8,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
 import re
+from collections import OrderedDict
 
 
 lemmatizer = WordNetLemmatizer()
@@ -23,7 +24,7 @@ def get_wordnet_pos(word):
 
     return tag_dict.get(tag, wordnet.NOUN)
 
-def clean_words(s):
+def clean_words(s,keep_duplicates=True):
     # Remove Unicode
     s = re.sub(r'[^\x00-\x7F]+', ' ', s)
     # Remove Mentions
@@ -40,7 +41,9 @@ def clean_words(s):
     s = word_tokenize(s)
     #Remove stopwords and lemmatize with tags
     words = [lemmatizer.lemmatize(word, get_wordnet_pos(word)) for word in s if word not in all_stopwords and word != '']
-    words = list(set(words))
+    
+    if not keep_duplicates:
+        words = list(OrderedDict.fromkeys(words))
     words = ' '.join(words)
     return words
 
