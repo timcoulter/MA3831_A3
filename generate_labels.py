@@ -37,7 +37,6 @@ def add_genre_columns(df):
     
 df1 = pickle.load(open("plot_df.p","rb"))
 df2 = pickle.load(open("review_df.p","rb"))
-
 df1 = df1.reset_index(drop=True)
 df2 = df2.reset_index(drop=True)
 

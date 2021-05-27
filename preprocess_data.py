@@ -12,7 +12,7 @@ except Exception:
 pd.set_option('mode.chained_assignment', None)
     
 df = pickle.load(open("movie_data2.p","rb"))
-print(df.head())
+#print(df.head())
 
 #First fix the date and country
 
@@ -46,6 +46,10 @@ try:
     review_df = pickle.load(open("review_df.p","rb"))
 except Exception:
     review_df = pd.DataFrame(columns=columns_review)
+    
+    
+print(plot_df.head())
+print(review_df.head())
 
 for i in tqdm.tqdm(range(len(title))):
     
@@ -62,16 +66,16 @@ for i in tqdm.tqdm(range(len(title))):
     p = p.replace('...','.').split('<>')
     r = r.replace('...','.').split('<>')
     
-    for i in range(len(p)):
-        p2 = p[i].split('. ')
-        p2 = ' '.join([clean_words(x) for x in p])
+    for k in range(len(p)):
+        p2 = p[k].split('. ')
+        p2 = ' '.join([clean_words(x) for x in p2])
         X2 = X[columns_plot]
         X2.loc[0,'plot'] = p2
         plot_df = pd.concat([plot_df,X2])
 
-    for i in range(len(r)):
-        r2 = r[i].split('. ')
-        r2 = ' '.join([clean_words(x) for x in r])
+    for k in range(len(r)):
+        r2 = r[k].split('. ')
+        r2 = ' '.join([clean_words(x) for x in r2])
         X2 = X[columns_review]
         X2.loc[0,'review'] = r2
         review_df = pd.concat([review_df,X2])

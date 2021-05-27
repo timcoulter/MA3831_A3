@@ -21,6 +21,11 @@ df2 = df2.reset_index(drop=True)
 genres = list(df1['genre'].unique())
 genres = ', '.join(genres).lower().strip()
 genres = genres.split(', ')
+
+plt.hist(x=genres)
+plt.show()
+
+
 genres = list(filter(None, genres))
 genres = list(OrderedDict.fromkeys(genres))
 genres = sorted(genres)
@@ -37,11 +42,14 @@ plt.xlabel('Length')
 plt.ylabel('Frequency')
 plt.title('Histogram of Movie Plot Lengths')
 
-
 plt.figure()
 plt.hist(x=r_lengths,bins=100,range=(min(p_lengths),max(p_lengths)))
 plt.xlabel('Length')
 plt.ylabel('Frequency')
 plt.title('Histogram of Movie Review Lengths')
 plt.show()
+
+all_words = ' '.join(words)
+print(len(list(set(words))))
+
 

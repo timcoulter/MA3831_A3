@@ -21,6 +21,7 @@ except Exception:
     df['date'] = ''
     df['plot'] = ''
     df['review'] = ''
+    df['user_rating'] = ''
     
     pickle.dump(df,open('movie_data2.p', "wb" ))
 
@@ -33,12 +34,17 @@ for i in tqdm.tqdm(range(len(urls))):
     x = df.loc[df['url'] == urls[i],'length']
     y = x.iloc[0]
     if y == 0:
+        print(urls[i])
         r1 = requests.get(urls[i])
+        r1 = requests.get('https://www.imdb.com/title/tt0111161/')
+        #print(r1.content)
         if r1.status_code != 200:
             continue
 
-        soup = bs4.BeautifulSoup(r1.content,'lxml')
+        soup = bs4.BeautifulSoup(r1.content,"lxml")
+        print(soup.prettify())
         subtext = soup.find("div", {"class" : "subtext"})
+        xx = soup.find_all("div", {"id" : "wrapper"})
 
         length  = subtext.time.string.strip()
         length = length.split(' ')
@@ -94,6 +100,16 @@ for i in tqdm.tqdm(range(len(urls))):
             review.append(r.text)
         review = '<>'.join(review)
         df.loc[df['url'] == urls[i],'review'] = review
+        
+        user_ratings = soup2.find_all("svg", {"class" : "ipl-icon ipl-star-icon"})
+        if len(user_ratings) > 10:
+                user_ratings = user_ratings[0:10]
+        user_rating = list()
+        
+        for u in user_ratings:
+            print()
+        print()
+        
 
     if i % 100 == 0:
         pickle.dump(df,open('movie_data2.p', "wb" ))

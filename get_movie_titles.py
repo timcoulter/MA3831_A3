@@ -1,4 +1,4 @@
-import asyncio, aiohttp, aiohttp_retry, os, bs4, requests, re, pickle, time
+import os, bs4, requests, re, pickle, time
 import pandas as pd
 
 try:
@@ -15,7 +15,8 @@ except Exception:
     dataset = pd.DataFrame(columns=cnames)
     pickle.dump(dataset,open('movie_data.p', "wb" ))
 
-main_url = 'https://www.imdb.com/search/title/?title_type=feature&num_votes=1000,&has=plot&view=simple&sort=user_rating,desc&count=250&ref_=adv_prv'
+#main_url = 'https://www.imdb.com/search/title/?title_type=feature&num_votes=1000,&has=plot&view=simple&sort=user_rating,desc&count=250&ref_=adv_prv'
+main_url = 'https://www.imdb.com/search/title/?title_type=feature&release_date=1990-01-01,2020-12-31&num_votes=1000,&view=simple&sort=num_votes,desc&count=250'
 sz = 0
 sz_prev = 1000000
 
@@ -75,7 +76,7 @@ while sz != sz_prev:
     
     pickle.dump(dataset,open('movie_data.p', "wb" ))
     
-    time.sleep(3)
+    #time.sleep(3)
     
     main_url = nav_link
 
