@@ -18,11 +18,14 @@ try:
 except Exception:
     pth = 'C:/Users/timco/Documents/MA3831 Data/movie_data_new/L_func'
     os.chdir(pth)
-    
+
 user_rating = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
-user_rating2 = [1,2,3,4,5,6,7,8,9,10]
 
 def predict_review_rating(txt):
+    
+    user_rating = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+    user_rating2 = [1,2,3,4,5,6,7,8,9,10]
+
 
     tok = pickle.load(open("tok.p","rb"))
 
@@ -35,7 +38,7 @@ def predict_review_rating(txt):
     #Process plot
     review = txt.split('. ')
     review = ' '.join([clean_words(x) for x in review]).strip()
-    print(review)
+    #print(review)
     # print(len(plot))
     review = [review]
 
@@ -45,19 +48,35 @@ def predict_review_rating(txt):
         
     pred = model.predict(sequences_matrix)
     
-    return pred
+    list1, list2, list3 = zip(*sorted(zip(list(pred[0]), user_rating, user_rating2)))
+    pred, user_rating, = (list(t) for t in zip(*sorted(zip(list1, list2))))
+    pred.reverse()
+    user_rating.reverse()
+    
+    return [user_rating,pred]
 
-#Shawshank Redemption
-#review = 'The Shawshank Redemption has great performances, extremely well written script and story all leading to a deeply emotional climax! One of the best dramas of all time!'
-review = "Pulp Fiction may be the single best film ever made, and quite appropriately it is by one of the most creative directors of all time, Quentin Tarantino. This movie is amazing from the beginning definition of pulp to the end credits and boasts one of the best casts ever assembled with the likes of Bruce Willis, Samuel L. Jackson, John Travolta, Uma Thurman, Harvey Keitel, Tim Roth and Christopher Walken. The dialog is surprisingly humorous for this type of film, and I think that's what has made it so successful. Wrongfully denied the many Oscars it was nominated for, Pulp Fiction is by far the best film of the 90s and no Tarantino film has surpassed the quality of this movie (although Kill Bill came close). As far as I'm concerned this is the top film of all-time and definitely deserves a watch if you haven't seen it."
+#A Mid Summer Nights dream
+#Positive Review
+review1 = "I absolutely LOVED this book. So adventures and deep. \nThe detail of description really helped me enjoy and full fill my book reading addiction, \nI would totally recommend this book to anyone who likes deep literature and a tale for love."
 
-out = predict_review_rating(review)
+#Negative Review
+review2 = "I think the story was diffcult why the many story lines it was too weird and tough"
 
-list1, list2, list3 = zip(*sorted(zip(list(out[0]), user_rating, user_rating2)))
-out, user_rating, user_rating2 = (list(t) for t in zip(*sorted(zip(list1, list2, list3))))
-out.reverse()
-user_rating.reverse()
-user_rating2.reverse()
+out1 = predict_review_rating(review1)
+out2 = predict_review_rating(review2)
 
+print()
+print(review1)
 for i in range(len(user_rating)):
-    print('{0} : {1}'.format(user_rating[i],out[i]))
+    print('{0} : {1}'.format(out1[0][i], out1[1][i]))
+print()
+    
+print(review2)
+for i in range(len(user_rating)):
+    print('{0} : {1}'.format(out2[0][i], out2[1][i]))
+    
+print()
+
+
+
+

@@ -35,7 +35,7 @@ def predict_genres(txt):
     #Process plot
     plot = txt.split('. ')
     plot = ' '.join([clean_words(x) for x in plot]).strip()
-    print(plot)
+    #print(plot)
     # print(len(plot))
     plot = [plot]
 
@@ -43,19 +43,37 @@ def predict_genres(txt):
     sequences = tok.texts_to_sequences(plot)
     sequences_matrix = sequence.pad_sequences(sequences,maxlen=100)
         
-    pred = model.predict(sequences_matrix)
+    pred = model.predict(sequences_matrix).tolist()
+    pred = pred[0]
     
-    return pred
+    list1, list2 = zip(*sorted(zip(pred, genres)))
+    out, genres = (list(t) for t in zip(*sorted(zip(list1, list2))))
+    out.reverse()
+    genres.reverse()
+    
+    return [genres,out]
 
-#Pulp Fiction
-plot = 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.'
-out = predict_genres(plot)
+#A mid summernights dream (Book)
+plot1 = 'Four Athenians run away to the forest only to have Puck the fairy make both of the boys fall in love with the same girl. \nThe four run through the forest pursuing each other while Puck helps his master play a trick on the fairy queen. \nIn the end, Puck reverses the magic, and the two couples reconcile and marry.'
 
-list1, list2 = zip(*sorted(zip(list(out[0]), genres)))
-out, genres = (list(t) for t in zip(*sorted(zip(list1, list2))))
-out.reverse()
-genres.reverse()
+#Harry Potter and The Philosphers Stone
+plot2 = "It is a story about Harry Potter, an orphan brought up by his aunt and uncle because his parents were killed when he was a baby. \nHarry is unloved by his uncle and aunt but everything changes when he is invited to join \nHogwarts School of Witchcraft and Wizardry and he finds out he's a wizard."
 
+out1 = predict_genres(plot1)
+out2 = predict_genres(plot2)
+
+print()
+print(plot1)
 for i in range(len(genres)):
-    print('{0} : {1}'.format(genres[i],out[i]))
+    print('{0} : {1}'.format(out1[0][i],out1[1][i]))
+          
+          
+print()
+print(plot2)
+for i in range(len(genres)):
+    print('{0} : {1}'.format(out2[0][i],out2[1][i]))
+    
+print()
+          
+          
     
