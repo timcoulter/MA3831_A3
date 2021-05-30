@@ -21,6 +21,7 @@ from keras.callbacks import EarlyStopping
 from keras import backend as K
 from keras.callbacks import History 
 import tensorflow_addons as tfa
+from tensorflow.keras import initializers
 
 
 #Functions for keras.metrics
@@ -76,18 +77,20 @@ tok.fit_on_texts(X_train)
 sequences = tok.texts_to_sequences(X_train)
 sequences_matrix = sequence.pad_sequences(sequences,maxlen=max_len)
 
+pickle.dump(tok,open("tok.p","wb"))
+
 #Generate model
 model = Sequential(name=name)
 model.add(Embedding(input_dim=max_words,output_dim=embedding_vec_len,input_length=max_len))
 model.add(LSTM(units=lstm_units))
 model.add(Dropout(0.2))
-model.add(Dense(100, activation='sigmoid'))
+model.add(Dense(100, activation='sigmoid',kernel_initializer=initializers.RandomNormal(stddev=0.25),bias_initializer=initializers.Zeros()))
 model.add(Dropout(0.2))
-model.add(Dense(len(genres), activation='sigmoid'))
+model.add(Dense(len(genres), activation='sigmoid',kernel_initializer=initializers.RandomNormal(stddev=0.25),bias_initializer=initializers.Zeros()))
 
 L_func = tfa.losses.SigmoidFocalCrossEntropy()
-model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
-#model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+#model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
 
 batch_size = 128
 n_epochs = 50

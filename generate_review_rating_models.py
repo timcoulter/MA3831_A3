@@ -77,8 +77,12 @@ lstm_units = 256
     
 tok = Tokenizer(num_words=max_words)
 tok.fit_on_texts(X_train)
+
 sequences = tok.texts_to_sequences(X_train)
 sequences_matrix = sequence.pad_sequences(sequences,maxlen=max_len)
+
+pickle.dump(tok,open("tok.p","wb"))
+
 
 test_sequences = tok.texts_to_sequences(X_test)
 test_sequences_matrix = sequence.pad_sequences(test_sequences,maxlen=max_len)
@@ -148,8 +152,8 @@ def get_BiGRU(max_words=max_words,embedding_vec_len=embedding_vec_len,max_len=ma
     model.add(Dense(10,activation='softmax'))
     
     L_func = tfa.losses.SigmoidFocalCrossEntropy()
-    model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
-    #model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+    #model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+    model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
     
     
     #model.summary()
@@ -168,8 +172,8 @@ def get_LSTM(lstm_units=lstm_units,max_words=max_words,embedding_vec_len=embeddi
     
     L_func = tfa.losses.SigmoidFocalCrossEntropy()
 
-    model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
-    #model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+    #model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+    model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
     
     #model.summary()
     return model
@@ -186,8 +190,8 @@ def get_CNN(max_words=max_words,embedding_vec_len=embedding_vec_len,max_len=max_
     model.add(Dense(10, activation='softmax'))
     
     L_func = tfa.losses.SigmoidFocalCrossEntropy()
-    model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
-    #model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+    #model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+    model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
     return model
   
 def test_model(model,Y_test=Y_test,test_sequences_matrix=test_sequences_matrix,max_words=max_words,embedding_vec_len=embedding_vec_len,max_len=max_len,save=True):

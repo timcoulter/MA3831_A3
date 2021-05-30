@@ -13,10 +13,10 @@ from keras.preprocessing import sequence
 from word_processing import clean_words
 
 try:
-    pth = 'C:/Users/Tim/Documents/MA3831 Data/A3'
+    pth = 'C:/Users/Tim/Documents/MA3831 Data/movie_data_new/L_func'
     os.chdir(pth)
 except Exception:
-    pth = 'C:/Users/timco/Documents/MA3831 Data/A3'
+    pth = 'C:/Users/timco/Documents/MA3831 Data/movie_data_new/L_func'
     os.chdir(pth)
     
 user_rating = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
@@ -48,7 +48,7 @@ def predict_review_rating(txt):
     return pred
 
 #Shawshank Redemption
-review = 'The Shawshank Redemption has great performances, extremely well written script and story all leading to a deeply emotional climax! One of the best dramas of all time!'
+#review = 'The Shawshank Redemption has great performances, extremely well written script and story all leading to a deeply emotional climax! One of the best dramas of all time!'
 review = "Pulp Fiction may be the single best film ever made, and quite appropriately it is by one of the most creative directors of all time, Quentin Tarantino. This movie is amazing from the beginning definition of pulp to the end credits and boasts one of the best casts ever assembled with the likes of Bruce Willis, Samuel L. Jackson, John Travolta, Uma Thurman, Harvey Keitel, Tim Roth and Christopher Walken. The dialog is surprisingly humorous for this type of film, and I think that's what has made it so successful. Wrongfully denied the many Oscars it was nominated for, Pulp Fiction is by far the best film of the 90s and no Tarantino film has surpassed the quality of this movie (although Kill Bill came close). As far as I'm concerned this is the top film of all-time and definitely deserves a watch if you haven't seen it."
 
 out = predict_review_rating(review)
