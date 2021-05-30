@@ -78,5 +78,14 @@ plt.xlabel('Rating')
 plt.ylabel('Frequency')
 plt.savefig("rating_freq.png")
 
-plt.show()
+#plt.show()
 
+plots = list(df1['plot'])
+plots = ' '.join(plots)
+plots = plots.split(' ')
+print(len(set(plots)))
+
+reviews = list(df2['review'])
+reviews = ' '.join(reviews)
+reviews = reviews.split(' ')
+print(len(set(reviews)))
