@@ -49,6 +49,7 @@ p_lengths = [len(i.split(' ')) for i in words]
 words = list(df2['review'])
 r_lengths = [len(i.split(' '))  for i in words]
 
+#Movie plot length histogram
 plt.figure()
 plt.hist(x=p_lengths,bins=100,range=(min(p_lengths),max(p_lengths)),edgecolor='black', linewidth=1.2,align='left')
 plt.xlabel('Length')
@@ -56,6 +57,7 @@ plt.ylabel('Frequency')
 plt.title('Histogram of Movie Plot Lengths')
 plt.savefig("plot_lengths.png")
 
+#Movie review length histogram
 plt.figure()
 plt.hist(x=r_lengths,bins=100,range=(min(p_lengths),max(p_lengths)),edgecolor='black', linewidth=1.2,align='left')
 plt.xlabel('Length')
@@ -71,6 +73,7 @@ ratings = [int(x) for x in ratings]
 ratings = sorted(ratings)
 ratings = [str(x) for x in ratings]
 
+#Movie rating histogram
 plt.figure()
 plt.hist(x=ratings,bins=len(list(set(ratings))), edgecolor='black', linewidth=1.2)
 plt.title('Histogram of Movie Rating Frequency')
@@ -78,8 +81,7 @@ plt.xlabel('Rating')
 plt.ylabel('Frequency')
 plt.savefig("rating_freq.png")
 
-#plt.show()
-
+#Get vocabulary sizes 
 plots = list(df1['plot'])
 plots = ' '.join(plots)
 plots = plots.split(' ')

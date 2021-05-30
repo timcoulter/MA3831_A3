@@ -3,12 +3,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import nltk
 import datetime as dt
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 try:
-    pth = 'C:/Users/Tim/Documents/MA3831 Data'
+    pth = 'C:/Users/Tim/Documents/MA3831 Data/movie_data_new'
     os.chdir(pth)
 except Exception:
-    pth = 'C:/Users/timco/Documents/MA3831 Data'
+    pth = 'C:/Users/timco/Documents/MA3831 Data/movie_data_new'
     os.chdir(pth)
 
 try:
@@ -28,6 +30,10 @@ except Exception:
 print(df.head())
 urls = df.url
 
+chrome_options = Options()
+#chrome_options.add_argument("--headless")
+driver = webdriver.Chrome(options=chrome_options)
+
 for i in tqdm.tqdm(range(len(urls))):
     
     #Get movie length, genre and date
@@ -35,16 +41,17 @@ for i in tqdm.tqdm(range(len(urls))):
     y = x.iloc[0]
     if y == 0:
         print(urls[i])
-        r1 = requests.get(urls[i])
+        r1 = requests.get(urls[i],verify=False)
         r1 = requests.get('https://www.imdb.com/title/tt0111161/')
         #print(r1.content)
         if r1.status_code != 200:
             continue
 
-        soup = bs4.BeautifulSoup(r1.content,"lxml")
-        print(soup.prettify())
+        driver.get(urls[i]);
+        content = driver.page_source
+        
+        soup = bs4.BeautifulSoup(content,"lxml")
         subtext = soup.find("div", {"class" : "subtext"})
-        xx = soup.find_all("div", {"id" : "wrapper"})
 
         length  = subtext.time.string.strip()
         length = length.split(' ')

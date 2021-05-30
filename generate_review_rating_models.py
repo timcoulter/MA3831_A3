@@ -145,11 +145,13 @@ def get_BiGRU(max_words=max_words,embedding_vec_len=embedding_vec_len,max_len=ma
     model.add(Dropout(0.2))
     model.add(Dense(10,activation='sigmoid'))
     model.add(Dropout(0.2))
-    model.add(Dense(10,activation='sigmoid'))
+    model.add(Dense(10,activation='softmax'))
+    
     L_func = tfa.losses.SigmoidFocalCrossEntropy()
-    
-    
     model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+    #model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+    
+    
     #model.summary()
     return model
 
@@ -162,7 +164,7 @@ def get_LSTM(lstm_units=lstm_units,max_words=max_words,embedding_vec_len=embeddi
     model.add(Dropout(0.2))
     model.add(Dense(256,activation='sigmoid'))
     model.add(Dropout(0.2))
-    model.add(Dense(10,activation='sigmoid'))
+    model.add(Dense(10,activation='softmax'))
     
     L_func = tfa.losses.SigmoidFocalCrossEntropy()
 
@@ -181,11 +183,11 @@ def get_CNN(max_words=max_words,embedding_vec_len=embedding_vec_len,max_len=max_
     model.add(GlobalMaxPooling1D())
     model.add(Dense(100, activation='sigmoid'))
     model.add(Dropout(0.2))
-    model.add(Dense(10, activation='sigmoid'))
+    model.add(Dense(10, activation='softmax'))
     
     L_func = tfa.losses.SigmoidFocalCrossEntropy()
-    
     model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
+    #model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
     return model
   
 def test_model(model,Y_test=Y_test,test_sequences_matrix=test_sequences_matrix,max_words=max_words,embedding_vec_len=embedding_vec_len,max_len=max_len,save=True):

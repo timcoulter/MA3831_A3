@@ -24,7 +24,7 @@ def get_wordnet_pos(word):
 
     return tag_dict.get(tag, wordnet.NOUN)
 
-def clean_words(s,keep_duplicates=True):
+def clean_words(s,keep_duplicates=True,remove_stopwords=True):
     # Remove Unicode
     s = re.sub(r'[^\x00-\x7F]+', ' ', s)
     # Remove Mentions
@@ -40,7 +40,10 @@ def clean_words(s,keep_duplicates=True):
                     
     s = word_tokenize(s)
     #Remove stopwords and lemmatize with tags
-    words = [lemmatizer.lemmatize(word, get_wordnet_pos(word)) for word in s if word not in all_stopwords and word != '']
+    if remove_stopwords:
+        words = [lemmatizer.lemmatize(word, get_wordnet_pos(word)) for word in s if word not in all_stopwords and word != '']
+    else:
+        words = [lemmatizer.lemmatize(word, get_wordnet_pos(word)) for word in s if word != '']
     
     if not keep_duplicates:
         words = list(OrderedDict.fromkeys(words))

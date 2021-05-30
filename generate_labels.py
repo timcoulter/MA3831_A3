@@ -19,7 +19,6 @@ def add_genre_columns(df):
     genres = list(OrderedDict.fromkeys(genres))
     genres = sorted(genres)
     
-    #print(genres)
 
     #add column for each genre
     for g in genres:
@@ -30,7 +29,7 @@ def add_genre_columns(df):
         g = df_genres[i].lower().split(', ')
         for k in genres:
             if k in g:
-                #print([i,k])
+                #1,0 labels for each genre
                 df.loc[i,k] = 1      
     return df
     

@@ -23,8 +23,7 @@ from keras.callbacks import History
 import tensorflow_addons as tfa
 
 
-
-
+#Functions for keras.metrics
 def recall_m(y_true, y_pred):
     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
     possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
@@ -49,17 +48,12 @@ except Exception:
     pth = 'C:/Users/timco/Documents/MA3831 Data/A3'
     os.chdir(pth)
     
-json = [f for f in os.listdir(pth) if f.endswith('.json')]
-json = sorted(json)
 
-h5 = [f for f in os.listdir(pth) if f.endswith('.h5')]
-h5 = sorted(h5)
   
 df1 = pickle.load(open("plot_df2.p","rb"))
-df2 = pickle.load(open("review_df2.p","rb"))
 df1 = df1.reset_index(drop=True)
-df2 = df2.reset_index(drop=True)
 
+#get unique genres in alphabetical order
 genres = list(df1['genre'].unique())
 genres = ', '.join(genres).lower().strip()
 genres = genres.split(', ')
@@ -76,11 +70,13 @@ name = "LSTM"
 
 X_train, X_test, Y_train, Y_test = train_test_split(df1['plot'],df1[genres], train_size=0.8, random_state=1)
 
+#Tokenize and generate sequence matrix
 tok = Tokenizer(num_words=max_words)
 tok.fit_on_texts(X_train)
 sequences = tok.texts_to_sequences(X_train)
 sequences_matrix = sequence.pad_sequences(sequences,maxlen=max_len)
 
+#Generate model
 model = Sequential(name=name)
 model.add(Embedding(input_dim=max_words,output_dim=embedding_vec_len,input_length=max_len))
 model.add(LSTM(units=lstm_units))
@@ -92,7 +88,6 @@ model.add(Dense(len(genres), activation='sigmoid'))
 L_func = tfa.losses.SigmoidFocalCrossEntropy()
 model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
 #model.compile(loss='categorical_crossentropy', metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
-#model.compile(loss=L_func, metrics=['acc',tf.keras.metrics.Recall(),tf.keras.metrics.Precision(),f1,tf.keras.metrics.AUC()], optimizer='adam')
 
 batch_size = 128
 n_epochs = 50
@@ -101,6 +96,7 @@ history = History()
 model.fit(sequences_matrix,Y_train,batch_size=batch_size,epochs=n_epochs,validation_split=0.2,verbose=1, callbacks=[history])
 #model.fit(sequences_matrix,Y_train,batch_size=batch_size,epochs=n_epochs,validation_split=0.2,verbose=1, callbacks=[EarlyStopping(monitor='val_loss',min_delta=0.00001),history])
 
+#Plot training progress
 hist = history.history
 X = range(1,len(hist['loss'])+1)
 plt.figure()

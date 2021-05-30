@@ -51,6 +51,7 @@ except Exception:
 print(plot_df.head())
 print(review_df.head())
 
+
 for i in tqdm.tqdm(range(len(title))):
     
     processed_titles = list(plot_df['title'])
